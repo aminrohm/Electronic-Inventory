@@ -1,0 +1,12 @@
+ {% extends 'base.html' %}
+
+{% block content %}
+    <h2>Storage Locations</h2>
+    <ul>
+        {% for location in object_list %}
+            <li>{{ location.prefix }}-{{location.index}} | {{location.location}} <a href="{% url 'ahinventory:storagelocation-update' location.pk %}">Update</a> | <a href="{% url 'ahinventory:storagelocation-delete' location.pk %}">Delete</a></li>
+        {% endfor %}
+    </ul>
+
+{% include 'ah_footer.html' %} 
+{% endblock %}

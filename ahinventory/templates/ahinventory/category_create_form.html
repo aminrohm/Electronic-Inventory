@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% load mptt_tags %}
+{% block title %}Create Category{% endblock %}
+
+{% block content %}
+<form method="POST">{% csrf_token %}
+	<table>
+    {{ form.as_table }}
+    </table>
+    <button type="submit" name ="save" value="save">Save</button>
+    <button type="submit" name ="another" value="another">Another</button>
+</form>
+
+ 
+ <ul>
+{% recursetree categories %}
+<li>
+{{ node.name }}<a href="{% url 'ahinventory:category-update' node.pk %}">U</a><a href="{% url 'ahinventory:category-delete' node.pk %}">D</a>
+{% if not node.is_leaf_node %}
+<ul class="children">
+{{ children }} 
+</ul>
+{% endif %}
+</li>
+{% endrecursetree %}
+</ul>
+
+
+{% include 'ah_footer.html' %} 
+
+{% endblock %}

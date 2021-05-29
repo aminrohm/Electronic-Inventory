@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div>
+<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <table>
+    {{ form.as_table }}
+    </table>
+    <button type="submit" name="save" value="save">Save</button>
+    <button type="submit" name="another" value="another">Another</button>
+</form>
+</div>
+{% include 'ah_footer.html' %}  
+<table class="table table-striped">
+<tr>
+{% for item in storage %}
+{% if forloop.counter|divisibleby:5 %}
+	    <td> <div class="table-head">{{ item.prefix }}{{item.index}}</div>
+	      <div class="table-content">
+			  <ul>
+	       {% for component in item.item_set.all %}
+            <li>{{component.namevalue}}({{component.quantity}}) <a href="{% url 'ahinventory:item-update' component.pk %}">U</a>|<a href="{% url 'ahinventory:item-delete' component.pk %}">D</a></li>
+           {% endfor %}
+             </ul>
+	      </div>
+	     </td> 
+</tr>
+<tr>
+{% else %}
+	    <td> <div class="table-head">{{ item.prefix }}{{item.index}}</div>
+	      <div class="table-content">
+			  <ul>
+	       {% for component in item.item_set.all %}
+            <li>{{component.namevalue}}({{component.quantity}}) <a href="{% url 'ahinventory:item-update' component.pk %}">U</a>|<a href="{% url 'ahinventory:item-delete' component.pk %}">D</a></li>
+           {% endfor %}
+             </ul>
+	      </div>
+	     </td> 
+{% endif %}
+{% endfor %}
+</tr>
+</table>
+
+
+
+{% include 'ah_footer.html' %}   
+{% endblock %}

@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+ <h2>Alvan Home Inventory</h2>
+
+<div class="container">
+<table>
+ <tr>
+   <td>
+     <form action="{% url 'ahinventory:home' %}" method="GET">
+      <table>
+        {{ search_form.as_table }}
+      </table>
+      <input type="submit" class="btn btn-info" value="Submit Button">
+     </form>
+   </td>
+   <td>
+	<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+     <table>
+      {{ input_form.as_table }}
+     </table>
+     <button type="submit" name="save" value="save">Save</button>
+     <button type="submit" name="another" value="another">Another</button>
+    </form>
+   </td>
+ </tr>
+</table>
+</div>
+{% include 'ah_footer.html' %}  
+
+
+{% if search_flag %}
+		{% if category %}    
+		  <ul>
+		  {% for category in filter %}
+			<li>
+			<ul>
+			{{category.name}}
+			 {% for item in category.item_set.all %}
+			<li>{{item.namevalue}}({{ item.quantity}})   ==> {{item.storelocation}} <a href="{% url 'ahinventory:category-update' item.pk %}">Update</a> | <a href="{% url 'ahinventory:category-delete' item.pk %}">Delete</a></li>
+			 {% endfor %}
+			 </ul>
+		  {% endfor %}
+			</li>
+		  </ul>
+		{% endif %}
+		{% if item %}
+		<ul>
+		{% for item in filter %}
+		<li> {{item.namevalue}}({{item.quantity}}) ==> {{item.storelocation}}<a href="{% url 'ahinventory:item-update' item.pk %}">Update</a> | <a href="{% url 'ahinventory:item-delete' item.pk %}">Delete</a></li>
+		{% endfor %}
+		</ul>
+		{% endif %}
+
+		{% if location %}
+
+		 {% for loc in filter %}
+		   <ul>
+			{{ loc.prefix }}-{{loc.index}}
+			  {% for item in loc.item_set.all %}
+			   <li> {{item.namevalue}}({{item.quantity}})<a href="{% url 'ahinventory:item-update' item.pk %}">Update</a> | <a href="{% url 'ahinventory:item-delete' item.pk %}">Delete</a> </li>
+			   {% endfor %}
+		   </ul>
+		  </li>
+		 {% endfor %}
+		{% endif %}
+
+		{% if search_warning %}
+		<p style="color:red;font-size:30px">Select only one !</p>
+		{% endif %}
+{% endif %}
+
+{% if input_flag %}
+		<table class="table table-striped">
+		<tr>
+		{% for item in storage %}
+		{% if forloop.counter|divisibleby:5 %}
+				<td> <div class="table-head">{{ item.prefix }}{{item.index}}</div>
+				  <div class="table-content">
+					  <ul>
+				   {% for component in item.item_set.all %}
+					<li>{{component.namevalue}}({{component.quantity}}) <a href="{% url 'ahinventory:item-update' component.pk %}">U</a>|<a href="{% url 'ahinventory:item-delete' component.pk %}">D</a></li>
+				   {% endfor %}
+					 </ul>
+				  </div>
+				 </td> 
+		</tr>
+		<tr>
+		{% else %}
+				<td> <div class="table-head">{{ item.prefix }}{{item.index}}</div>
+				  <div class="table-content">
+					  <ul>
+				   {% for component in item.item_set.all %}
+					<li>{{component.namevalue}}({{component.quantity}}) <a href="{% url 'ahinventory:item-update' component.pk %}">U</a>|<a href="{% url 'ahinventory:item-delete' component.pk %}">D</a></li>
+				   {% endfor %}
+					 </ul>
+				  </div>
+				 </td> 
+		{% endif %}
+		{% endfor %}
+		</tr>
+		</table>
+{% endif %}
+
+{% endblock %}
+
+

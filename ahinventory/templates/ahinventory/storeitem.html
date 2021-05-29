@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+ <h2>Store Item</h2>
+
+<div class="container">
+ <form action="{% url 'ahinventory:search' %}" method="GET">
+  <table>
+  {{ form.as_table }}
+  </table>
+ <input type="submit" class="btn btn-info" value="Submit Button">
+ </form>
+</div>
+
+
+
+ {% for loc in filter %}
+   <ul>
+	{{ loc.prefix }}-{{loc.index}}
+	  {% for item in loc.item_set.all %}
+       <li> {{item.category}} | {{item.namevalue}} | {{item.quantity}} </li>
+       {% endfor %}
+   </ul>
+  </li>
+ {% endfor %}
+
+
+{% if warning %}
+<p style="color:red;font-size:30px">Input all fields !</p>
+{% endif %}
+
+{% include 'ah_footer.html' %}   
+{% endblock %}
+
+

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Items</h2>
+
+
+
+    <form action="{% url 'ahinventory:search' %}" method="GET">
+        {{ form.as_p }}
+        <button type="submit" class="save btn btn-default">Search</button>
+    </form>
+
+    
+  <ul>
+  {% for item in filter %}
+    <li>{{ item.name }} | {{item.category}} | {{item.quantity}} | {{item.storelocation}} == <a href="{% url 'ahinventory:category-update' item.pk %}">Update</a> | <a href="{% url 'ahinventory:category-delete' item.pk %}">Delete</a></li>
+  {% endfor %}
+  </ul>
+    
+    
+     <a href="{% url 'ahinventory:home' %}">Home</a>
+{% endblock %}
